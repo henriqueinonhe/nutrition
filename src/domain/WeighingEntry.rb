@@ -1,4 +1,6 @@
 class WeighingEntry
+  attr_reader :date, :weight_in_kg
+
   def self.validate_date(date)
     if !date.is_a? Time
       # TODO: Use a specialized exception
