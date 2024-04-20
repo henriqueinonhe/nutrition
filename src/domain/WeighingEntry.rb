@@ -30,4 +30,11 @@ class WeighingEntry
       weight_in_kg: #{@weight_in_kg}
     HEREDOC
   end
+
+  def to_h()
+    {
+      date: @date,
+      weight_in_kg: @weight_in_kg
+    }
+  end
 end

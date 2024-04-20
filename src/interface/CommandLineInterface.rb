@@ -1,4 +1,6 @@
 require "./src/domain/WeighingEntry"
+require "./src/app/RetrieveWeighingEntries"
+require "./src/app/StoreWeighingEntries"
 
 class CommandLineInterface
   NO_OP = proc {}
@@ -7,7 +9,7 @@ class CommandLineInterface
     # TODO: Load weighings
     @weighings = [
       WeighingEntry.new(
-        date: Time.new(),
+        date: Time.new(), 
         weight_in_kg: 65.3
       )
     ]
