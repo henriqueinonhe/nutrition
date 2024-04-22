@@ -1,0 +1,2 @@
+
+Domain::WeighingEntryPersistence = Infra::FsWeighingEntryPersistence

@@ -1,17 +1,17 @@
-require "./src/domain/WeighingEntry"
-require "./src/app/RetrieveWeighingEntries"
-require "./src/app/StoreWeighingEntries"
-
-class CommandLineInterface
+class Interface::CommandLine
   NO_OP = proc {}
 
   def initialize(reader:, writer:)
     @reader = reader
     @writer = writer
 
+    initial_ui = Interface::Ui::Initial.new()
+    weighing_menu_ui = Interface::Ui::WeighingMenu.new()
+    add_weighing_menu_ui = Interface::Ui::AddWeighingMenu.new()
+
     # TODO: Load weighings
     @weighings = [
-      WeighingEntry.new(
+      Domain::WeighingEntry.new(
         date: Time.new(), 
         weight_in_kg: 65.3
       )
@@ -19,16 +19,14 @@ class CommandLineInterface
 
     @state_matrix = {
     Initial: {
-      ui: method(:render_initial_ui),
-      parse_input: method(:parse_initial_input),
+      ui: initial_ui,
       transitions: {
         StartWeighingMenu: [:WeighingMenu, NO_OP],
         Exit: [:Finished, method(:exit)]
       },
     },
     WeighingMenu: {
-      ui: method(:render_weighing_menu_ui),
-      parse_input: method(:parse_weighing_menu_input),
+      ui: weighing_menu_ui,
       transitions: {
         ListWeighings: [:WeighingMenu, method(:list_weighings)],
         StartAddWeighingMenu: [:AddWeighing, NO_OP],
@@ -36,8 +34,7 @@ class CommandLineInterface
       }
     },
     AddWeighing: {
-      ui: method(:render_add_weighing_menu_ui),
-      parse_input: method(:parse_add_weighing_menu_input),
+      ui: add_weighing_menu_ui,
       transitions: {
         AddWeighing: [:WeighingMenu, method(:add_weighing)]
       }
@@ -69,11 +66,11 @@ class CommandLineInterface
   private
 
   def render_ui(state)
-    @state_matrix[state][:ui].call()
+    @writer.write(@state_matrix[state][:ui].render())
   end
 
   def parse_input(state, input)
-    @state_matrix[state][:parse_input].call(input)
+    @state_matrix[state][:ui].parse_input(input)
   end
 
   def process_command(state, command)
@@ -93,49 +90,8 @@ class CommandLineInterface
     return next_state
   end
 
-  def render_initial_ui()
-    @writer.write <<~HEREDOC
-    Nutrition Tracker
-
-    1. Weighing Module
-    0. Exit
-    HEREDOC
-  end
-
-  # Specific
-
-  def parse_initial_input(input)
-    case input
-    when "1"
-      return [:StartWeighingMenu, nil]
-    when "0"
-      return [:Exit, nil]
-    end
-  end
-
   def exit(*)
     @writer.end()
-  end
-
-  def render_weighing_menu_ui()
-    @writer.write <<~HEREDOC
-    Weighing Module:
-
-    1. List weighings
-    2. Add weighing
-    0. Back
-    HEREDOC
-  end
-
-  def parse_weighing_menu_input(input)
-    case input
-    when "1"
-      return [:ListWeighings, nil]
-    when "2"
-      return [:StartAddWeighingMenu, nil]
-    when "0"
-      return [:Back, nil]
-    end
   end
 
   def list_weighings(*)
@@ -148,20 +104,8 @@ class CommandLineInterface
     @writer.write("\n")
   end
 
-  def render_add_weighing_menu_ui()
-    @writer.write <<~HEREDOC
-    Write the weight (in Kg)
-    HEREDOC
-  end
-
-  def parse_add_weighing_menu_input(input)
-    weight_in_kg = input.to_f
-
-    return [:AddWeighing, weight_in_kg]
-  end
-
   def add_weighing(weight_in_kg)
-    @weighings.push(WeighingEntry.new(
+    @weighings.push(Domain::WeighingEntry.new(
       date: Time.new(),
       weight_in_kg: weight_in_kg
     ))

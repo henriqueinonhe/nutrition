@@ -1,7 +1,4 @@
-require "json"
-require "./src/domain/WeighingEntry"
-
-module FsWeighingEntryPersistence
+module Infra::FsWeighingEntryPersistence
   WEIGHINGS_PATH = ENV["ENV"] == "test" ? "./storage/weighings.test.json" : "./storage/weighings.json"
 
   def self.store(entries)
@@ -20,7 +17,7 @@ module FsWeighingEntryPersistence
     file.close()
 
     list.map { |serialized_entry| 
-      WeighingEntry.new(
+      Domain::WeighingEntry.new(
         date: Time.new(serialized_entry[:date]),
         weight_in_kg: serialized_entry[:weight_in_kg]
       ) 

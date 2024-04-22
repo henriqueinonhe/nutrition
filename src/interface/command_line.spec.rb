@@ -1,7 +1,3 @@
-require "./src/testing/Test"
-require "./src/testing/Assertions"
-require "./src/interface/CommandLineInterface"
-
 Test.test {
   class WriterMock
     attr_reader :buffer
@@ -42,7 +38,7 @@ Test.test {
   writer = WriterMock.new
   reader = ReaderMock.new
 
-  CommandLineInterface.new(
+  Interface::CommandLine.new(
     reader:,
     writer:
   ).start

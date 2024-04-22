@@ -1,4 +1,4 @@
-module StdinReader
+module Interface::StdinReader
   def self.read
     puts
     input = readline.strip()

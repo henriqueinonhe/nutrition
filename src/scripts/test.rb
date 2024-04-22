@@ -1,8 +1,13 @@
-$LOAD_PATH.push(Dir.pwd)
+require "zeitwerk"
+require "json"
+
+loader = Zeitwerk::Loader.new
+loader.push_dir("#{Dir.pwd}/src")
+loader.push_dir("#{Dir.pwd}/src/testing")
+loader.ignore("#{Dir.pwd}/src/**/*.spec.rb")
+loader.setup
 
 ENV["ENV"] = "test"
-
-require "./src/testing/Test"
 
 root_dir_path = Dir.pwd
 src_dir_path = root_dir_path + "/src"

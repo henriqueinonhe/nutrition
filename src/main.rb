@@ -1,10 +1,14 @@
-require "./src/interface/CommandLineInterface"
-require "./src/interface/InterfaceReader"
-require "./src/interface/InterfaceWriter"
+require "zeitwerk"
+require "json"
 
-CommandLineInterface.new(
-  reader: InterfaceReader,
-  writer: InterfaceWriter
+loader = Zeitwerk::Loader.new
+loader.push_dir("#{Dir.pwd}/src")
+loader.ignore("#{Dir.pwd}/src/**/*.spec.rb")
+loader.setup
+
+Interface::CommandLine.new(
+  reader: Interface::Reader,
+  writer: Interface::Writer
 ).start
 
 

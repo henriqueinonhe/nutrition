@@ -1,4 +1,4 @@
-module StdoutWriter
+module Interface::StdoutWriter
   def self.write(output)
     puts output
   end

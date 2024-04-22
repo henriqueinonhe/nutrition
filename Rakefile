@@ -9,3 +9,7 @@ end
 task :test do
   ruby "./src/scripts/test.rb"
 end
+
+task :sandbox do
+  ruby "./src/sandbox.rb"
+end

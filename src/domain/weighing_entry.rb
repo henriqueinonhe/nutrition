@@ -1,4 +1,4 @@
-class WeighingEntry
+class Domain::WeighingEntry
   attr_reader :date, :weight_in_kg
 
   def self.validate_date(date)
