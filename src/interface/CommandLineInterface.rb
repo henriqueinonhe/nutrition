@@ -5,7 +5,10 @@ require "./src/app/StoreWeighingEntries"
 class CommandLineInterface
   NO_OP = proc {}
 
-  def initialize()
+  def initialize(reader:, writer:)
+    @reader = reader
+    @writer = writer
+
     # TODO: Load weighings
     @weighings = [
       WeighingEntry.new(
@@ -47,9 +50,11 @@ class CommandLineInterface
 
     begin
       while true
+        break if state == :Finished
+
         render_ui(state)
 
-        input = read_input()
+        input = @reader.read()
 
         command = parse_input(state, input)
 
@@ -62,14 +67,6 @@ class CommandLineInterface
   end
 
   private
-
-  def read_input()
-    puts
-    input = readline.strip()
-    puts
-
-    return input
-  end
 
   def render_ui(state)
     @state_matrix[state][:ui].call()
@@ -85,7 +82,7 @@ class CommandLineInterface
     result = @state_matrix[state][:transitions][action]
 
     if !result 
-      puts "Invalid command!\n\n"
+      @writer.write "Invalid command!\n\n"
       return state
     end
 
@@ -97,7 +94,7 @@ class CommandLineInterface
   end
 
   def render_initial_ui()
-    puts <<~HEREDOC
+    @writer.write <<~HEREDOC
     Nutrition Tracker
 
     1. Weighing Module
@@ -117,11 +114,11 @@ class CommandLineInterface
   end
 
   def exit(*)
-    Kernel::exit(0)
+    @writer.end()
   end
 
   def render_weighing_menu_ui()
-    puts <<~HEREDOC
+    @writer.write <<~HEREDOC
     Weighing Module:
 
     1. List weighings
@@ -142,17 +139,17 @@ class CommandLineInterface
   end
 
   def list_weighings(*)
-    puts "Weighings:\n\n"
+    @writer.write "Weighings:\n\n"
 
     @weighings.each do | weighing |
-      puts "#{weighing.date} #{weighing.weight_in_kg}Kg"
+      @writer.write "#{weighing.date} #{weighing.weight_in_kg}Kg"
     end
 
-    puts
+    @writer.write("\n")
   end
 
   def render_add_weighing_menu_ui()
-    puts <<~HEREDOC
+    @writer.write <<~HEREDOC
     Write the weight (in Kg)
     HEREDOC
   end
