@@ -1,5 +1,7 @@
 $LOAD_PATH.push(Dir.pwd)
 
+ENV["ENV"] = "test"
+
 require "./src/testing/Test"
 
 root_dir_path = Dir.pwd

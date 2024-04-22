@@ -1,6 +1,6 @@
 module Assertions
-  def self.check(expr)
-    raise "Failed!" unless expr
+  def self.check(&expr)
+    raise "Failed!" unless expr.call
   end
 
   def self.check_throws()
