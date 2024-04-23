@@ -8,7 +8,9 @@ class Interface::CommandLine
     app_add_weighing:,
     exit_transition:,
     list_weighings_transition:,
-    add_weighing_transition:
+    add_weighing_transition:,
+    delete_weighing_menu_ui:,
+    delete_weighing_transition:
   )
     @reader = reader
     @writer = writer
@@ -26,6 +28,7 @@ class Interface::CommandLine
       transitions: {
         ListWeighings: list_weighings_transition,
         StartAddWeighingMenu: proc { :AddWeighing },
+        StartDeleteWeighingMenu: proc { :DeleteWeighing },
         Back: proc { :Initial }
       }
     },
@@ -35,6 +38,12 @@ class Interface::CommandLine
         AddWeighing: add_weighing_transition
       }
     },
+    DeleteWeighing: {
+      ui: delete_weighing_menu_ui,
+      transitions: {
+        DeleteWeighing: delete_weighing_transition
+      }
+    }
   }
   end
 

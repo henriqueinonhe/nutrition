@@ -25,6 +25,6 @@ class Application::AddWeighing
 
     @weighing_entry_persistence.store(@weighings)
 
-    return @weighings
+    return @weighings.zip(Domain::ComputeWeighingAverages.call(@weighings))
   end
 end

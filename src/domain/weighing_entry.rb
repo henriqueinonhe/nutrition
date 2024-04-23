@@ -1,5 +1,7 @@
+require "random/formatter"
+
 class Domain::WeighingEntry
-  attr_reader :date, :weight_in_kg
+  attr_reader :id, :date, :weight_in_kg
 
   def self.validate_date(date)
     if !date.is_a? Time
@@ -25,6 +27,7 @@ class Domain::WeighingEntry
     self.class.validate_date(date)
     self.class.validate_weight(weight_in_kg)
 
+    @id = Random.uuid()
     @date = date
     @weight_in_kg = weight_in_kg
   end
@@ -39,6 +42,7 @@ class Domain::WeighingEntry
 
   def to_h()
     {
+      id: @id,
       date: @date,
       weight_in_kg: @weight_in_kg
     }

@@ -5,6 +5,7 @@ class Interface::Ui::WeighingMenu
 
     1. List weighings
     2. Add weighing
+    3. Delete weighing
     0. Back
     HEREDOC
   end
@@ -15,6 +16,8 @@ class Interface::Ui::WeighingMenu
       return [:ListWeighings, nil]
     when "2"
       return [:StartAddWeighingMenu, nil]
+    when "3"
+      return [:StartDeleteWeighingMenu, nil]
     when "0"
       return [:Back, nil]
     end
