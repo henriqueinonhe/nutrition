@@ -1,42 +1,42 @@
 class Interface::CommandLine
-  NO_OP = proc {}
-
   def initialize(reader:, writer:)
     @reader = reader
     @writer = writer
+
+    # TODO: Extract the composition root somewhere else
+    weighings = Application::RetrieveWeighingEntries.call()
+    @weighings = weighings
 
     initial_ui = Interface::Ui::Initial.new()
     weighing_menu_ui = Interface::Ui::WeighingMenu.new()
     add_weighing_menu_ui = Interface::Ui::AddWeighingMenu.new()
 
-    # TODO: Load weighings
-    @weighings = [
-      Domain::WeighingEntry.new(
-        date: Time.new(), 
-        weight_in_kg: 65.3
-      )
-    ]
+    app_add_weighing = Application::AddWeighing.new(weighings:)
+
+    exit_transition = Interface::Transitions::Exit.new(writer:)
+    list_weighings_transition = Interface::Transitions::ListWeighings.new(writer:, weighings:)
+    add_weighing_transition = Interface::Transitions::AddWeighing.new(writer:, weighings:, app_add_weighing:)
 
     @state_matrix = {
     Initial: {
       ui: initial_ui,
       transitions: {
-        StartWeighingMenu: [:WeighingMenu, NO_OP],
-        Exit: [:Finished, method(:exit)]
+        StartWeighingMenu: proc { :WeighingMenu },
+        Exit: exit_transition
       },
     },
     WeighingMenu: {
       ui: weighing_menu_ui,
       transitions: {
-        ListWeighings: [:WeighingMenu, method(:list_weighings)],
-        StartAddWeighingMenu: [:AddWeighing, NO_OP],
-        Back: [:Initial, NO_OP]
+        ListWeighings: list_weighings_transition,
+        StartAddWeighingMenu: proc { :AddWeighing },
+        Back: proc { :Initial }
       }
     },
     AddWeighing: {
       ui: add_weighing_menu_ui,
       transitions: {
-        AddWeighing: [:WeighingMenu, method(:add_weighing)]
+        AddWeighing: add_weighing_transition
       }
     },
   }
@@ -76,38 +76,15 @@ class Interface::CommandLine
   def process_command(state, command)
     (action, payload) = command
 
-    result = @state_matrix[state][:transitions][action]
+    handler = @state_matrix[state][:transitions][action]
 
-    if !result 
+    if !handler 
       @writer.write "Invalid command!\n\n"
       return state
     end
 
-    (next_state, handler) = result
-
-    handler.call(payload)
+    next_state = handler.call(payload)
 
     return next_state
-  end
-
-  def exit(*)
-    @writer.end()
-  end
-
-  def list_weighings(*)
-    @writer.write "Weighings:\n\n"
-
-    @weighings.each do | weighing |
-      @writer.write "#{weighing.date} #{weighing.weight_in_kg}Kg"
-    end
-
-    @writer.write("\n")
-  end
-
-  def add_weighing(weight_in_kg)
-    @weighings.push(Domain::WeighingEntry.new(
-      date: Time.new(),
-      weight_in_kg: weight_in_kg
-    ))
   end
 end

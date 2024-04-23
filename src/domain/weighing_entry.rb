@@ -4,14 +4,20 @@ class Domain::WeighingEntry
   def self.validate_date(date)
     if !date.is_a? Time
       # TODO: Use a specialized exception
-      raise "Date (#{date}) is not a valid date!"
+      raise Errors::Error.new(
+        msg: "Date (#{date}) is not a valid date!",
+        tags: [:PreconditionViolation, :ConstructionFailure, :WeighingEntry, :InvalidDate]
+      )
     end
   end
 
   def self.validate_weight(weight)
     if !(weight.is_a? Numeric) || weight <= 0
       # TODO: Use a specialized exception
-      raise "Weight (#{weight}) is not a valid weight!"
+      raise Errors::Error.new(
+        msg: "Weight (#{weight}) is not a valid weight!",
+        tags: [:PreconditionViolation, :ConstructionFailure, :WeighingEntry, :InvalidWeight]
+      )
     end
   end
 
