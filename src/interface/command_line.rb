@@ -1,21 +1,17 @@
 class Interface::CommandLine
-  def initialize(reader:, writer:)
+  def initialize(
+    reader:, 
+    writer:,
+    initial_ui:,
+    weighing_menu_ui:,
+    add_weighing_menu_ui:,
+    app_add_weighing:,
+    exit_transition:,
+    list_weighings_transition:,
+    add_weighing_transition:
+  )
     @reader = reader
     @writer = writer
-
-    # TODO: Extract the composition root somewhere else
-    weighings = Application::RetrieveWeighingEntries.call()
-    @weighings = weighings
-
-    initial_ui = Interface::Ui::Initial.new()
-    weighing_menu_ui = Interface::Ui::WeighingMenu.new()
-    add_weighing_menu_ui = Interface::Ui::AddWeighingMenu.new()
-
-    app_add_weighing = Application::AddWeighing.new(weighings:)
-
-    exit_transition = Interface::Transitions::Exit.new(writer:)
-    list_weighings_transition = Interface::Transitions::ListWeighings.new(writer:, weighings:)
-    add_weighing_transition = Interface::Transitions::AddWeighing.new(writer:, weighings:, app_add_weighing:)
 
     @state_matrix = {
     Initial: {

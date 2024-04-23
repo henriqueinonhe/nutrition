@@ -1,1 +1,0 @@
-Interface::Writer = Interface::StdoutWriter

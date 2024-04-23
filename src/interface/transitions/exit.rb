@@ -5,5 +5,7 @@ class Interface::Transitions::Exit
 
   def call(*)
     @writer.end()
+
+    return :Finished
   end
 end
