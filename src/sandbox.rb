@@ -1,13 +1,4 @@
-class Error < StandardError
-  def initialize(msg)
-    super(msg)
-  end
-  
-  def to_s
-    "#{super} HERE"
-  end
+class A 
 end
 
-raise Error.new("FooJS dhA SD")
-
-
+pp A.instance_method(:initialize)

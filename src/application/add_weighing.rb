@@ -1,6 +1,7 @@
 class Application::AddWeighing
-  def initialize(weighings:)
+  def initialize(weighings:, weighing_entry_persistence:)
     @weighings = weighings
+    @weighing_entry_persistence = weighing_entry_persistence
   end
 
   def call(weight_in_kg)
@@ -22,7 +23,7 @@ class Application::AddWeighing
 
     @weighings.push(new_weighing_entry)
 
-    Domain::WeighingEntryPersistence.store(@weighings)
+    @weighing_entry_persistence.store(@weighings)
 
     return @weighings
   end

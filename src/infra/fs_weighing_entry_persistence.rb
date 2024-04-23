@@ -1,16 +1,18 @@
-module Infra::FsWeighingEntryPersistence
-  WEIGHINGS_PATH = ENV["ENV"] == "test" ? "./storage/weighings.test.json" : "./storage/weighings.json"
+class Infra::FsWeighingEntryPersistence
+  def initialize(weighings_file_path:)
+    @weighings_file_path = weighings_file_path
+  end
 
-  def self.store(entries)
-    file = File.open(WEIGHINGS_PATH, "w")
+  def store(entries)
+    file = File.open(@weighings_file_path, "w")
 
     file.write(entries.map { |entry| entry.to_h }.to_json)
 
     file.close()
   end
 
-  def self.retrieve()
-    file = File.open(WEIGHINGS_PATH, "r")
+  def retrieve()
+    file = File.open(@weighings_file_path, "r")
 
     list = JSON.parse(file.read(), {symbolize_names: true})
 

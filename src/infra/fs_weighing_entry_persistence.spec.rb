@@ -18,9 +18,11 @@ Test.test {
     )
   ]
 
-  Infra::FsWeighingEntryPersistence.store(entries)
+  persistence = Infra::FsWeighingEntryPersistence.new(weighings_file_path: "./storage/weighings.test.json")
 
-  retrieved = Infra::FsWeighingEntryPersistence.retrieve()
+  persistence.store(entries)
+
+  retrieved = persistence.retrieve()
 
   Assertions.check {
     retrieved.map { |entry| entry.to_h.to_json } == entries.map { |entry| entry.to_h.to_json } 
