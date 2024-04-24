@@ -19,4 +19,8 @@ module Assertions
       raise "Failed!"
     end
   end
+
+  def self.should_not_get_here()
+    raise "Failed!"
+  end
 end
