@@ -19,4 +19,13 @@ class Domain::MealEntry
   def food_name
     @food.name
   end
+
+  def to_h
+    {
+      id: @id,
+      date: @date,
+      food: @food.to_h,
+      weight_in_grams: @weight_in_grams
+    }
+  end
 end
