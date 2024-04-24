@@ -23,11 +23,10 @@ class Domain::WeighingEntry
     end
   end
 
-  def initialize(date:, weight_in_kg:)
+  def initialize(id: Random.uuid(), date:, weight_in_kg:)
     self.class.validate_date(date)
     self.class.validate_weight(weight_in_kg)
 
-    @id = Random.uuid()
     @date = date
     @weight_in_kg = weight_in_kg
   end

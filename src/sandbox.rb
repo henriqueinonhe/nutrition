@@ -1,4 +1,5 @@
-class A 
+def foo(&f)
+  puts f.call(self)
 end
 
-pp A.instance_method(:initialize)
+foo &:methods.to_proc

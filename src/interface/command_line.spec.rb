@@ -66,6 +66,7 @@ Test.test {
 
     1. List weighings
     2. Add weighing
+    3. Delete weighing
     0. Back
     HEREDOC
 
