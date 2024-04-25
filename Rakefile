@@ -7,9 +7,13 @@ task :setup do
 end
 
 task :test do
-  ruby "./src/scripts/test.rb"
+  sh "bundle exec rspec"
 end
 
 task :sandbox do
   ruby "./src/sandbox.rb"
+end
+
+task :console do
+  ruby "./src/scripts/console.rb"
 end

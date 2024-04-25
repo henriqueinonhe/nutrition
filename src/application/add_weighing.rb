@@ -7,6 +7,7 @@ class Application::AddWeighing
   def call(weight_in_kg)
     begin
       new_weighing_entry = Domain::WeighingEntry.new(
+        id: Random.uuid(),
         date: Time.new(),
         weight_in_kg: weight_in_kg
       )

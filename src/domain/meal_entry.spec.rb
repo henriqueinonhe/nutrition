@@ -1,5 +1,6 @@
-Test.test {
-  food = Domain::Food.new(
+RSpec.describe Domain::MealEntry do
+  def setup
+    food = Domain::Food.new(
     id: "id",
     name: "Requeijão",
     kcal_per_gram: 1.57,
@@ -10,39 +11,38 @@ Test.test {
     sodium_in_mg_per_gram: 1.47
   )
 
-  meal_entry = Domain::MealEntry.new(
-    id: "id",
-    date: Time.new(),
-    food: food,
-    weight_in_grams: 27
-  )
+    meal_entry = Domain::MealEntry.new(
+      id: "id",
+      date: Time.new(),
+      food: food,
+      weight_in_grams: 27
+    )
 
-  stats = meal_entry.stats
+    stats = meal_entry.stats
 
-  epsilon = 0.1
+    return {
+      meal_entry:,
+      stats:
+    }
+  end
 
-  Assertions.check {
-    FloatTest.epsilon_equals(stats[:kcal], 42.39, epsilon)
-  }
+  context "#stats" do
+    context "When calculating the stats of a meal entry" do
+      it "Returns the correct stats" do
+        result = setup()
+        stats = result[:stats]
 
-  Assertions.check {
-    FloatTest.epsilon_equals(stats[:carbohydrates_in_grams], 0.486, epsilon)
-  }
+        epsilon = 0.1
 
-  Assertions.check {
-    FloatTest.epsilon_equals(stats[:protein_in_grams], 3.24, epsilon)
-  }
-
-  Assertions.check {
-    FloatTest.epsilon_equals(stats[:total_fat_in_grams], 2.97, epsilon)
-  }
-
-  Assertions.check {
-    FloatTest.epsilon_equals(stats[:fibers_in_grams], 0.0, epsilon)
-  }
-
-  Assertions.check {
-    FloatTest.epsilon_equals(stats[:sodium_in_mg], 39.69, epsilon)
-  }
-
-}
+        aggregate_failures {
+          expect(stats[:kcal]).to be_within(epsilon).of(42.39)
+          expect(stats[:carbohydrates_in_grams]).to be_within(epsilon).of(0.486)
+          expect(stats[:protein_in_grams]).to be_within(epsilon).of(3.24)
+          expect(stats[:total_fat_in_grams]).to be_within(epsilon).of(2.97)
+          expect(stats[:fibers_in_grams]).to be_within(epsilon).of(0.0)
+          expect(stats[:sodium_in_mg]).to be_within(epsilon).of(39.69)
+        }
+      end
+    end
+  end
+end

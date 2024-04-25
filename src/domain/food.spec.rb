@@ -1,41 +1,45 @@
-Test.test {
-  food = Domain::Food.new(
-    id: "id",
-    name: "Requeijão",
-    kcal_per_gram: 1.57,
-    carbohydrates_in_grams_per_gram: 0.018,
-    protein_in_grams_per_gram: 0.12,
-    total_fat_in_grams_per_gram: 0.11,
-    fibers_in_grams_per_gram: 0.0,
-    sodium_in_mg_per_gram: 1.47
-  )
+RSpec.describe Domain::Food do
+  context "When creating a food" do
 
-  stats = food.stats_for_weight(27)
+  end
 
-  epsilon = 0.1
+  context "#stats_for_weight" do
+    context "When calculating stats for 27 grams of food" do
+      def setup
+        food = Domain::Food.new(
+          id: "id",
+          name: "Requeijão",
+          kcal_per_gram: 1.57,
+          carbohydrates_in_grams_per_gram: 0.018,
+          protein_in_grams_per_gram: 0.12,
+          total_fat_in_grams_per_gram: 0.11,
+          fibers_in_grams_per_gram: 0.0,
+          sodium_in_mg_per_gram: 1.47
+        )
 
-  Assertions.check {
-    FloatTest.epsilon_equals(stats[:kcal], 42.39, epsilon)
-  }
+        stats = food.stats_for_weight(27)
 
-  Assertions.check {
-    FloatTest.epsilon_equals(stats[:carbohydrates_in_grams], 0.486, epsilon)
-  }
+        return {
+          food:,
+          stats:
+        }
+      end
 
-  Assertions.check {
-    FloatTest.epsilon_equals(stats[:protein_in_grams], 3.24, epsilon)
-  }
+      it "Returns the correct stats" do
+        result = setup()
+        stats = result[:stats]
 
-  Assertions.check {
-    FloatTest.epsilon_equals(stats[:total_fat_in_grams], 2.97, epsilon)
-  }
-
-  Assertions.check {
-    FloatTest.epsilon_equals(stats[:fibers_in_grams], 0.0, epsilon)
-  }
-
-  Assertions.check {
-    FloatTest.epsilon_equals(stats[:sodium_in_mg], 39.69, epsilon)
-  }
-
-}
+        epsilon = 0.1
+        
+        aggregate_failures {
+          expect(stats[:kcal]).to be_within(epsilon).of(42.39)
+          expect(stats[:carbohydrates_in_grams]).to be_within(epsilon).of(0.486)
+          expect(stats[:protein_in_grams]).to be_within(epsilon).of(3.24)
+          expect(stats[:total_fat_in_grams]).to be_within(epsilon).of(2.97)
+          expect(stats[:fibers_in_grams]).to be_within(epsilon).of(0.0)
+          expect(stats[:sodium_in_mg]).to be_within(epsilon).of(39.69)
+        }
+      end
+    end
+  end
+end

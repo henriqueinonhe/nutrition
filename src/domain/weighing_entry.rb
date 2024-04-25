@@ -3,9 +3,17 @@ require "random/formatter"
 class Domain::WeighingEntry
   attr_reader :id, :date, :weight_in_kg
 
+  def self.validate_id(id)
+    if !id.is_a? String || id.empty?
+      raise Errors::Error.new(
+        msg: "ID (#{id}) is not a valid ID!",
+        tags: [:PreconditionViolation, :ConstructionFailure, :WeighingEntry, :InvalidId]
+      )
+    end
+  end
+
   def self.validate_date(date)
     if !date.is_a? Time
-      # TODO: Use a specialized exception
       raise Errors::Error.new(
         msg: "Date (#{date}) is not a valid date!",
         tags: [:PreconditionViolation, :ConstructionFailure, :WeighingEntry, :InvalidDate]
@@ -15,7 +23,6 @@ class Domain::WeighingEntry
 
   def self.validate_weight(weight)
     if !(weight.is_a? Numeric) || weight <= 0
-      # TODO: Use a specialized exception
       raise Errors::Error.new(
         msg: "Weight (#{weight}) is not a valid weight!",
         tags: [:PreconditionViolation, :ConstructionFailure, :WeighingEntry, :InvalidWeight]
@@ -23,10 +30,12 @@ class Domain::WeighingEntry
     end
   end
 
-  def initialize(id: Random.uuid(), date:, weight_in_kg:)
+  def initialize(id:, date:, weight_in_kg:)
+    self.class.validate_id(id)
     self.class.validate_date(date)
     self.class.validate_weight(weight_in_kg)
 
+    @id = id
     @date = date
     @weight_in_kg = weight_in_kg
   end
@@ -45,5 +54,12 @@ class Domain::WeighingEntry
       date: @date,
       weight_in_kg: @weight_in_kg
     }
+  end
+
+  def ==(other)
+    return other.instance_of?(Domain::WeighingEntry) &&
+      other.id == @id &&
+      other.date.to_i == @date.to_i &&
+      other.weight_in_kg == @weight_in_kg
   end
 end

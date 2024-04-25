@@ -1,5 +1,5 @@
 class Infra::FsMealEntryPersistence
-   def initialize(
+  def initialize(
     meal_entries_file_path:
   )
     @meal_entries_file_path = meal_entries_file_path

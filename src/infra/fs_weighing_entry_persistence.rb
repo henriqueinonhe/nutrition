@@ -20,6 +20,7 @@ class Infra::FsWeighingEntryPersistence
 
     list.map { |serialized_entry| 
       Domain::WeighingEntry.new(
+        id: serialized_entry[:id],
         date: Time.new(serialized_entry[:date]),
         weight_in_kg: serialized_entry[:weight_in_kg]
       ) 

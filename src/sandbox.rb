@@ -1,5 +1,5 @@
-def foo(&f)
-  puts f.call(self)
-end
+a = 10
 
-foo &:methods.to_proc
+x = { a: }
+
+pp x

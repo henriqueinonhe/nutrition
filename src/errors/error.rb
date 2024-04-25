@@ -1,5 +1,5 @@
 class Errors::Error < StandardError
-  attr_reader :msg
+  attr_reader :msg, :tags
 
   def initialize(msg:, tags:)
     super(msg)
