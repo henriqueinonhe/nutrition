@@ -1,3 +1,5 @@
+require "json"
+
 class Infra::FsFoodPersistence
   def initialize(
     foods_file_path:

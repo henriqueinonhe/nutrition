@@ -1,3 +1,5 @@
+require "json"
+
 class Infra::FsMealEntryPersistence
   def initialize(
     meal_entries_file_path:

@@ -1,3 +1,5 @@
+require "json"
+
 class Infra::FsWeighingEntryPersistence
   def initialize(weighings_file_path:)
     @weighings_file_path = weighings_file_path
