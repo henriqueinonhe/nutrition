@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Interface::Printers::PrintWeighings
   def initialize(writer:)
     @writer = writer
@@ -7,10 +9,15 @@ class Interface::Printers::PrintWeighings
     # TEMP
     index = 0
 
-    entries.each do | (weighing, average) |
-      @writer.write "#{index + 1}. #{weighing.date.strftime("%d/%m/%Y")} #{weighing.weight_in_kg}Kg #{format_average(average)}"
+    entries.each do |(weighing, average)|
+      position = index + 1
+      formatted_date = weighing.date.strftime('%d/%m/%Y')
+      formatted_weight = "#{weighing.weight_in_kg}Kg"
+      formatted_average = format_average(average)
 
-      index += 1 
+      @writer.write "#{position}. #{formatted_date} #{formatted_weight} #{formatted_average}"
+
+      index += 1
     end
 
     @writer.write("\n")
@@ -21,6 +28,6 @@ class Interface::Printers::PrintWeighings
   def format_average(average)
     return "#{average}Kg" if average
 
-    return "N/A"
+    'N/A'
   end
 end

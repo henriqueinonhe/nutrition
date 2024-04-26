@@ -1,4 +1,6 @@
-require "random/formatter"
+# frozen_string_literal: true
+
+require 'random/formatter'
 
 class Application::AddFood
   def initialize(foods_hash:, foods_persistence:)
@@ -19,7 +21,7 @@ class Application::AddFood
     check_duplicate_food_name(name)
 
     food = Domain::Food.new(
-      id: Random.uuid(),
+      id: Random.uuid,
       name:,
       kcal_per_gram:,
       carbohydrates_in_grams_per_gram:,
@@ -29,13 +31,13 @@ class Application::AddFood
       sodium_in_mg_per_gram:
     )
 
-    updated_foods_list = @foods_hash.to_a().map { |_, food| food } + [food]
+    updated_foods_list = @foods_hash.to_a.map { |_, f| f } + [food]
 
     @foods_persistence.store(updated_foods_list)
 
     @foods_hash[food.id] = food
 
-    return food
+    food
   end
 
   private
@@ -43,11 +45,11 @@ class Application::AddFood
   def check_duplicate_food_name(name)
     has_duplicate = @foods_hash.to_a.any? { |_, food| food.name == name }
 
-    if has_duplicate
-      raise Errors::Error.new(
-        msg: "Food with name #{name} already exists",
-        tags: [:ValidationError, :DuplicateName]
-      )
-    end
+    return unless has_duplicate
+
+    raise Errors::Error.new(
+      msg: "Food with name #{name} already exists",
+      tags: %i[ValidationError DuplicateName]
+    )
   end
 end

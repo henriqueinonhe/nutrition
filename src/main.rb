@@ -1,4 +1,6 @@
-require "zeitwerk"
+# frozen_string_literal: true
+
+require 'zeitwerk'
 
 loader = Zeitwerk::Loader.new
 loader.push_dir("#{Dir.pwd}/src")
@@ -9,7 +11,5 @@ loader.setup
 
 container = RootContainer
 
-container.get(:retrieve_weighing_entries).call()
-container.get(:command_line).start()
-
-
+container.get(:retrieve_weighing_entries).call
+container.get(:command_line).start

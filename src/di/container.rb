@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Di::Container
   def self.class_resolver(factory)
     [:Class, factory]
@@ -8,7 +10,7 @@ class Di::Container
   end
 
   def initialize(**resolvers)
-    #TODO: Validate resolvers
+    # TODO: Validate resolvers
 
     @resolvers = resolvers
 
@@ -24,7 +26,7 @@ class Di::Container
 
     @services[service_name] = service
 
-    return service
+    service
   end
 
   def derive(**resolvers)
@@ -38,14 +40,14 @@ class Di::Container
 
     case resolver_type
     when :Class
-      return resolve_class(service_name, resolver_factory)
+      resolve_class(service_name, resolver_factory)
     when :Value
-      return resolve_value(service_name, resolver_factory)
-    end 
+      resolve_value(service_name, resolver_factory)
+    end
   end
 
   def resolve_class(service_name, resolver_factory)
-    dependencies_names = resolver_factory.instance_method(:initialize).parameters.map { |type, name| name }
+    dependencies_names = resolver_factory.instance_method(:initialize).parameters.map { |_type, name| name }
 
     dependencies = dependencies_names.to_h { |name| [name, get(name)] }
 
@@ -59,6 +61,6 @@ class Di::Container
 
     @services[service_name] = service
 
-    return service
+    service
   end
 end

@@ -1,83 +1,85 @@
+# frozen_string_literal: true
+
 class Domain::Food
-  attr_reader :id, 
-              :name, 
-              :kcal_per_gram, 
-              :carbohydrates_in_grams_per_gram, 
-              :protein_in_grams_per_gram, 
-              :total_fat_in_grams_per_gram, 
-              :fibers_in_grams_per_gram, 
+  attr_reader :id,
+              :name,
+              :kcal_per_gram,
+              :carbohydrates_in_grams_per_gram,
+              :protein_in_grams_per_gram,
+              :total_fat_in_grams_per_gram,
+              :fibers_in_grams_per_gram,
               :sodium_in_mg_per_gram
 
   def self.validate_id(id)
-    if !id.is_a? String || id.empty?
-      raise Errors::Error.new(
-        msg: "ID (#{id}) is not a valid ID!",
-        tags: [:PreconditionViolation, :ConstructionFailure, :Food, :InvalidId]
-      )
-    end
+    return if id.is_a?(String) || id.empty?
+
+    raise Errors::Error.new(
+      msg: "ID (#{id}) is not a valid ID!",
+      tags: %i[PreconditionViolation ConstructionFailure Food InvalidId]
+    )
   end
 
   def self.validate_name(name)
-    if !name.is_a? String || name.empty?
-      raise Errors::Error.new(
-        msg: "Name (#{name}) is not a valid name!",
-        tags: [:PreconditionViolation, :ConstructionFailure, :Food, :InvalidName]
-      )
-    end
+    return if name.is_a?(String) || name.empty?
+
+    raise Errors::Error.new(
+      msg: "Name (#{name}) is not a valid name!",
+      tags: %i[PreconditionViolation ConstructionFailure Food InvalidName]
+    )
   end
 
   def self.validate_kcal_per_gram(kcal_per_gram)
-    if !self.quantity_per_gram_is_valid?(kcal_per_gram)
-      raise Errors::Error.new(
-        msg: "Kcal per gram (#{kcal_per_gram}) is not a valid quantity per gram!",
-        tags: [:PreconditionViolation, :ConstructionFailure, :Food, :InvalidKcalPerGram]
-      )
-    end
+    return if quantity_per_gram_is_valid?(kcal_per_gram)
+
+    raise Errors::Error.new(
+      msg: "Kcal per gram (#{kcal_per_gram}) is not a valid quantity per gram!",
+      tags: %i[PreconditionViolation ConstructionFailure Food InvalidKcalPerGram]
+    )
   end
 
   def self.validate_carbohydrates_in_grams_per_gram(carbohydrates_in_grams_per_gram)
-    if !self.quantity_per_gram_is_valid?(carbohydrates_in_grams_per_gram)
-      raise Errors::Error.new(
-        msg: "Carbohydrates in grams per gram (#{carbohydrates_in_grams_per_gram}) is not a valid quantity per gram!",
-        tags: [:PreconditionViolation, :ConstructionFailure, :Food, :InvalidCarbohydratesInGramsPerGram]
-      )
-    end
+    return if quantity_per_gram_is_valid?(carbohydrates_in_grams_per_gram)
+
+    raise Errors::Error.new(
+      msg: "Carbohydrates in grams per gram (#{carbohydrates_in_grams_per_gram}) is not a valid quantity per gram!",
+      tags: %i[PreconditionViolation ConstructionFailure Food InvalidCarbohydratesInGramsPerGram]
+    )
   end
 
   def self.validate_protein_in_grams_per_gram(protein_in_grams_per_gram)
-    if !self.quantity_per_gram_is_valid?(protein_in_grams_per_gram)
-      raise Errors::Error.new(
-        msg: "Protein in grams per gram (#{protein_in_grams_per_gram}) is not a valid quantity per gram!",
-        tags: [:PreconditionViolation, :ConstructionFailure, :Food, :InvalidProteinInGramsPerGram]
-      )
-    end
+    return if quantity_per_gram_is_valid?(protein_in_grams_per_gram)
+
+    raise Errors::Error.new(
+      msg: "Protein in grams per gram (#{protein_in_grams_per_gram}) is not a valid quantity per gram!",
+      tags: %i[PreconditionViolation ConstructionFailure Food InvalidProteinInGramsPerGram]
+    )
   end
 
   def self.validate_total_fat_in_grams_per_gram(total_fat_in_grams_per_gram)
-    if !self.quantity_per_gram_is_valid?(total_fat_in_grams_per_gram)
-      raise Errors::Error.new(
-        msg: "Total fat in grams per gram (#{total_fat_in_grams_per_gram}) is not a valid quantity per gram!",
-        tags: [:PreconditionViolation, :ConstructionFailure, :Food, :InvalidTotalFatInGramsPerGram]
-      )
-    end
+    return if quantity_per_gram_is_valid?(total_fat_in_grams_per_gram)
+
+    raise Errors::Error.new(
+      msg: "Total fat in grams per gram (#{total_fat_in_grams_per_gram}) is not a valid quantity per gram!",
+      tags: %i[PreconditionViolation ConstructionFailure Food InvalidTotalFatInGramsPerGram]
+    )
   end
 
   def self.validate_fibers_in_grams_per_gram(fibers_in_grams_per_gram)
-    if !self.quantity_per_gram_is_valid?(fibers_in_grams_per_gram)
-      raise Errors::Error.new(
-        msg: "Fibers in grams per gram (#{fibers_in_grams_per_gram}) is not a valid quantity per gram!",
-        tags: [:PreconditionViolation, :ConstructionFailure, :Food, :InvalidFibersInGramsPerGram]
-      )
-    end
+    return if quantity_per_gram_is_valid?(fibers_in_grams_per_gram)
+
+    raise Errors::Error.new(
+      msg: "Fibers in grams per gram (#{fibers_in_grams_per_gram}) is not a valid quantity per gram!",
+      tags: %i[PreconditionViolation ConstructionFailure Food InvalidFibersInGramsPerGram]
+    )
   end
 
   def self.validate_sodium_in_mg_per_gram(sodium_in_mg_per_gram)
-    if !self.quantity_per_gram_is_valid?(sodium_in_mg_per_gram)
-      raise Errors::Error.new(
-        msg: "Sodium in mg per gram (#{sodium_in_mg_per_gram}) is not a valid quantity per gram!",
-        tags: [:PreconditionViolation, :ConstructionFailure, :Food, :InvalidSodiumInMgPerGram]
-      )
-    end
+    return if quantity_per_gram_is_valid?(sodium_in_mg_per_gram)
+
+    raise Errors::Error.new(
+      msg: "Sodium in mg per gram (#{sodium_in_mg_per_gram}) is not a valid quantity per gram!",
+      tags: %i[PreconditionViolation ConstructionFailure Food InvalidSodiumInMgPerGram]
+    )
   end
 
   def initialize(
@@ -136,7 +138,7 @@ class Domain::Food
   end
 
   def ==(other)
-    return other.instance_of?(Domain::Food) &&
+    other.instance_of?(Domain::Food) &&
       other.id == @id &&
       other.name == @name &&
       other.kcal_per_gram == @kcal_per_gram &&
@@ -147,8 +149,8 @@ class Domain::Food
       other.sodium_in_mg_per_gram == @sodium_in_mg_per_gram
   end
 
-  def clone()
-    return Domain::Food.new(
+  def clone
+    Domain::Food.new(
       id: @id,
       name: @name,
       kcal_per_gram: @kcal_per_gram,
@@ -160,9 +162,7 @@ class Domain::Food
     )
   end
 
-  private
-
   def self.quantity_per_gram_is_valid?(value)
-    return value.is_a?(Numeric) && value >= 0
+    value.is_a?(Numeric) && value >= 0
   end
 end

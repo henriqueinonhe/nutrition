@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Domain::MealEntry
   attr_reader :id, :date, :weight_in_grams
 
@@ -12,13 +14,13 @@ class Domain::MealEntry
     @food = food
     @weight_in_grams = weight_in_grams
   end
-  
+
   def stats
     @food.stats_for_weight(weight_in_grams)
   end
 
   def food
-    @food.clone().freeze()
+    @food.clone.freeze
   end
 
   def to_h
@@ -31,7 +33,7 @@ class Domain::MealEntry
   end
 
   def ==(other)
-    return other.instance_of?(Domain::MealEntry) &&
+    other.instance_of?(Domain::MealEntry) &&
       other.id == @id &&
       other.date.to_i == @date.to_i &&
       other.food == @food &&

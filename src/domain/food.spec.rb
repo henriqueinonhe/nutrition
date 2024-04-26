@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 RSpec.describe Domain::Food do
-  context "When creating a food" do
+  context 'When creating a food' do
   end
 
-  context "#stats_for_weight" do
-    context "When calculating stats for 27 grams of food" do
+  context '#stats_for_weight' do
+    context 'When calculating stats for 27 grams of food' do
       def setup
         food = Domain::Food.new(
-          id: "id",
-          name: "Requeijão",
+          id: 'id',
+          name: 'Requeijão',
           kcal_per_gram: 1.57,
           carbohydrates_in_grams_per_gram: 0.018,
           protein_in_grams_per_gram: 0.12,
@@ -18,26 +20,26 @@ RSpec.describe Domain::Food do
 
         stats = food.stats_for_weight(27)
 
-        return {
+        {
           food:,
           stats:
         }
       end
 
-      it "Returns the correct stats" do
-        result = setup()
+      it 'Returns the correct stats' do
+        result = setup
         stats = result[:stats]
 
         epsilon = 0.1
-        
-        aggregate_failures {
+
+        aggregate_failures do
           expect(stats[:kcal]).to be_within(epsilon).of(42.39)
           expect(stats[:carbohydrates_in_grams]).to be_within(epsilon).of(0.486)
           expect(stats[:protein_in_grams]).to be_within(epsilon).of(3.24)
           expect(stats[:total_fat_in_grams]).to be_within(epsilon).of(2.97)
           expect(stats[:fibers_in_grams]).to be_within(epsilon).of(0.0)
           expect(stats[:sodium_in_mg]).to be_within(epsilon).of(39.69)
-        }
+        end
       end
     end
   end

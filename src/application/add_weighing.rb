@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Application::AddWeighing
   def initialize(weighings:, weighing_entry_persistence:)
     @weighings = weighings
@@ -7,25 +9,25 @@ class Application::AddWeighing
   def call(weight_in_kg)
     begin
       new_weighing_entry = Domain::WeighingEntry.new(
-        id: Random.uuid(),
-        date: Time.new(),
-        weight_in_kg: weight_in_kg
+        id: Random.uuid,
+        date: Time.new,
+        weight_in_kg:
       )
-    rescue Errors::Error => error
-      if error.has_tag?(:WeighingEntry) && error.has_tag?(:ConstructionFailure)
+    rescue Errors::Error => e
+      if e.has_tag?(:WeighingEntry) && e.has_tag?(:ConstructionFailure)
         raise Errors::Error.new(
-          msg: error.msg,
+          msg: e.msg,
           tags: [:ValidationError]
         )
       end
 
-      raise error
+      raise e
     end
 
     @weighings.push(new_weighing_entry)
 
     @weighing_entry_persistence.store(@weighings)
 
-    return @weighings.zip(Domain::ComputeWeighingAverages.call(@weighings))
+    @weighings.zip(Domain::ComputeWeighingAverages.call(@weighings))
   end
 end

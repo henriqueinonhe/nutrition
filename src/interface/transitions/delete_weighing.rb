@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Interface::Transitions::DeleteWeighing
   def initialize(print_weighings:, delete_weighing:, weighings:)
     @print_weighings = print_weighings
@@ -12,6 +14,6 @@ class Interface::Transitions::DeleteWeighing
 
     @print_weighings.call(entries)
 
-    return :WeighingMenu
+    :WeighingMenu
   end
 end

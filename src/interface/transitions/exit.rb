@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 class Interface::Transitions::Exit
   def initialize(writer:)
     @writer = writer
   end
 
   def call(*)
-    @writer.end()
+    @writer.end
 
-    return :Finished
+    :Finished
   end
 end

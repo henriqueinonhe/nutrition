@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 RSpec.describe Domain::ComputeWeighingAverages do
-  context "When calculating the weighing averages" do
-    it "Returns the correct averages" do
+  context 'When calculating the weighing averages' do
+    it 'Returns the correct averages' do
       weights = [
         68.3,
         67,
@@ -14,8 +16,8 @@ RSpec.describe Domain::ComputeWeighingAverages do
 
       weighings = weights.map do |weight|
         Domain::WeighingEntry.new(
-          id: Random.uuid(),
-          date: Time.new(),
+          id: Random.uuid,
+          date: Time.new,
           weight_in_kg: weight
         )
       end
@@ -34,13 +36,12 @@ RSpec.describe Domain::ComputeWeighingAverages do
       ]
 
       zipped_averages = expected_averages.zip(actual_averages)
-      
+
       epsilon = 0.1
 
       expect(actual_averages.length).to eq(expected_averages.length)
 
-      expect(zipped_averages).to all(satisfy { |expected, actual| ((expected || 0) - (actual || 0)).abs() < epsilon })
+      expect(zipped_averages).to all(satisfy { |expected, actual| ((expected || 0) - (actual || 0)).abs < epsilon })
     end
   end
-
 end

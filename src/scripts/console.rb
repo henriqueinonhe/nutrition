@@ -1,8 +1,10 @@
-require "zeitwerk"
+# frozen_string_literal: true
+
+require 'zeitwerk'
 
 loader = Zeitwerk::Loader.new
 loader.push_dir("#{Dir.pwd}/src")
 loader.ignore("#{Dir.pwd}/src/**/*.spec.rb")
 loader.setup
 
-binding.irb
+binding.irb # rubocop:disable Lint/Debugger

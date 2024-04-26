@@ -1,61 +1,63 @@
-RSpec.describe Interface::CommandLine do
-  class WriterMock
-    attr_reader :buffer
-    
-    def initialize 
-      @buffer = []
-    end
-    
-    def write(output)
-      @buffer.push(output)
-    end
-    
-    def end(*)
-      # NO OP
-    end
-  end
-    
-  class ReaderMock
-    def initialize
-      @buffer = [
-        "1",
-        "0",
-        "0"
-      ].map { |line| line }
-    
-      @index = 0
-    end
-    
-    def read
-      input = @buffer[@index]
-    
-      @index += 1
-    
-      return input
-    end
-  end
+# frozen_string_literal: true
 
-  def setup
-    reader = ReaderMock.new
-    writer = WriterMock.new
+RSpec.describe Interface::CommandLine do
+  setup = lambda do
+    writer_mock_class = Class.new do
+      attr_reader :buffer
+
+      def initialize
+        @buffer = []
+      end
+
+      def write(output)
+        @buffer.push(output)
+      end
+
+      def end(*)
+        # NO OP
+      end
+    end
+
+    reader_mock_class = Class.new do
+      def initialize
+        @buffer = %w[
+          1
+          0
+          0
+        ].map { |line| line }
+
+        @index = 0
+      end
+
+      def read
+        input = @buffer[@index]
+
+        @index += 1
+
+        input
+      end
+    end
+
+    reader = writer_mock_class.new
+    writer = reader_mock_class.new
     weighing_entry_persistence = Infra::FsWeighingEntryPersistence.new(
-      weighings_file_path: "./storage/weighings.test.json"
+      weighings_file_path: './storage/weighings.test.json'
     )
 
     container = RootContainer.derive(
       weighing_entry_persistence: Di::Container.value_resolver(weighing_entry_persistence),
       reader: Di::Container.value_resolver(reader),
-      writer: Di::Container.value_resolver(writer),
+      writer: Di::Container.value_resolver(writer)
     )
 
-    return {
+    {
       container:,
       writer:
     }
   end
 
-  it "Behaves as expected" do
-    result = setup()
+  it 'Behaves as expected' do
+    result = setup.call
 
     container = result[:container]
     writer = result[:writer]
@@ -64,21 +66,21 @@ RSpec.describe Interface::CommandLine do
 
     expect(writer.buffer[0]).to eq(
       <<~HEREDOC
-      Nutrition Tracker
+        Nutrition Tracker
 
-      1. Weighing Module
-      0. Exit
+        1. Weighing Module
+        0. Exit
       HEREDOC
     )
 
     expect(writer.buffer[1]).to eq(
       <<~HEREDOC
-      Weighing Module:
+        Weighing Module:
 
-      1. List weighings
-      2. Add weighing
-      3. Delete weighing
-      0. Back
+        1. List weighings
+        2. Add weighing
+        3. Delete weighing
+        0. Back
       HEREDOC
     )
   end

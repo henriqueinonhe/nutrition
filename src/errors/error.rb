@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Errors::Error < StandardError
   attr_reader :msg, :tags
 
@@ -14,9 +16,9 @@ class Errors::Error < StandardError
 
   def to_s
     <<~HEREDOC
-    #{super()}
+      #{super()}
 
-    Tags: #{@tags.to_s}
+      Tags: #{@tags}
     HEREDOC
   end
 end

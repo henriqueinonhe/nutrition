@@ -1,9 +1,11 @@
-require "json"
+# frozen_string_literal: true
 
-Dir.mkdir("storage")
+require 'json'
 
-file = File.open("./storage/weighings.json", "w")
+Dir.mkdir('storage')
+
+file = File.open('./storage/weighings.json', 'w')
 
 file.write([].to_json)
 
-file.close()
+file.close

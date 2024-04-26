@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module TestUtils::FoodFactory
   def self.call(**overrides)
     default_values = {
-      id: Random.uuid(),
-      name: "Requeijão",
+      id: Random.uuid,
+      name: 'Requeijão',
       kcal_per_gram: 1.57,
       carbohydrates_in_grams_per_gram: 0.018,
       protein_in_grams_per_gram: 0.12,
@@ -13,6 +15,6 @@ module TestUtils::FoodFactory
 
     result = default_values.merge(overrides)
 
-    return Domain::Food.new(**result)
+    Domain::Food.new(**result)
   end
 end

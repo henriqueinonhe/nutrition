@@ -1,33 +1,35 @@
-require "random/formatter"
+# frozen_string_literal: true
+
+require 'random/formatter'
 
 class Domain::WeighingEntry
   attr_reader :id, :date, :weight_in_kg
 
   def self.validate_id(id)
-    if !id.is_a? String || id.empty?
-      raise Errors::Error.new(
-        msg: "ID (#{id}) is not a valid ID!",
-        tags: [:PreconditionViolation, :ConstructionFailure, :WeighingEntry, :InvalidId]
-      )
-    end
+    return if id.is_a?(String) || id.empty?
+
+    raise Errors::Error.new(
+      msg: "ID (#{id}) is not a valid ID!",
+      tags: %i[PreconditionViolation ConstructionFailure WeighingEntry InvalidId]
+    )
   end
 
   def self.validate_date(date)
-    if !date.is_a? Time
-      raise Errors::Error.new(
-        msg: "Date (#{date}) is not a valid date!",
-        tags: [:PreconditionViolation, :ConstructionFailure, :WeighingEntry, :InvalidDate]
-      )
-    end
+    return if date.is_a? Time
+
+    raise Errors::Error.new(
+      msg: "Date (#{date}) is not a valid date!",
+      tags: %i[PreconditionViolation ConstructionFailure WeighingEntry InvalidDate]
+    )
   end
 
   def self.validate_weight(weight)
-    if !(weight.is_a? Numeric) || weight <= 0
-      raise Errors::Error.new(
-        msg: "Weight (#{weight}) is not a valid weight!",
-        tags: [:PreconditionViolation, :ConstructionFailure, :WeighingEntry, :InvalidWeight]
-      )
-    end
+    return unless !(weight.is_a? Numeric) || weight <= 0
+
+    raise Errors::Error.new(
+      msg: "Weight (#{weight}) is not a valid weight!",
+      tags: %i[PreconditionViolation ConstructionFailure WeighingEntry InvalidWeight]
+    )
   end
 
   def initialize(id:, date:, weight_in_kg:)
@@ -40,15 +42,15 @@ class Domain::WeighingEntry
     @weight_in_kg = weight_in_kg
   end
 
-  def to_s()
+  def to_s
     <<~HEREDOC
-    WeightEntry
-      date: #{@date}
-      weight_in_kg: #{@weight_in_kg}
+      WeightEntry
+        date: #{@date}
+        weight_in_kg: #{@weight_in_kg}
     HEREDOC
   end
 
-  def to_h()
+  def to_h
     {
       id: @id,
       date: @date,
@@ -57,7 +59,7 @@ class Domain::WeighingEntry
   end
 
   def ==(other)
-    return other.instance_of?(Domain::WeighingEntry) &&
+    other.instance_of?(Domain::WeighingEntry) &&
       other.id == @id &&
       other.date.to_i == @date.to_i &&
       other.weight_in_kg == @weight_in_kg

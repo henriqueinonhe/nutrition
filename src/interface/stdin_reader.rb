@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Interface::StdinReader
   def self.read
     puts
-    input = readline.strip()
+    input = readline.strip
     puts
 
-    return input
+    input
   end
 end
