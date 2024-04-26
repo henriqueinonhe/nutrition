@@ -1,11 +1,11 @@
-Test.test {
+RSpec.describe Interface::CommandLine do
   class WriterMock
     attr_reader :buffer
-
+    
     def initialize 
       @buffer = []
     end
-
+    
     def write(output)
       @buffer.push(output)
     end
@@ -14,7 +14,7 @@ Test.test {
       # NO OP
     end
   end
-
+    
   class ReaderMock
     def initialize
       @buffer = [
@@ -22,54 +22,64 @@ Test.test {
         "0",
         "0"
       ].map { |line| line }
-
+    
       @index = 0
     end
-
+    
     def read
       input = @buffer[@index]
-
+    
       @index += 1
-
+    
       return input
     end
   end
 
-  reader = ReaderMock.new
-  writer = WriterMock.new
-  weighing_entry_persistence = Infra::FsWeighingEntryPersistence.new(
-    weighings_file_path: "./storage/weighings.test.json"
-  )
+  def setup
+    reader = ReaderMock.new
+    writer = WriterMock.new
+    weighing_entry_persistence = Infra::FsWeighingEntryPersistence.new(
+      weighings_file_path: "./storage/weighings.test.json"
+    )
 
-  container = RootContainer.derive(
-    weighing_entry_persistence: Di::Container.value_resolver(weighing_entry_persistence),
-    reader: Di::Container.value_resolver(reader),
-    writer: Di::Container.value_resolver(writer),
-  )
+    container = RootContainer.derive(
+      weighing_entry_persistence: Di::Container.value_resolver(weighing_entry_persistence),
+      reader: Di::Container.value_resolver(reader),
+      writer: Di::Container.value_resolver(writer),
+    )
 
-  container.get(:command_line).start
+    return {
+      container:,
+      writer:
+    }
+  end
 
-  Assertions.check {
-    expected = <<~HEREDOC
-    Nutrition Tracker
+  it "Behaves as expected" do
+    result = setup()
 
-    1. Weighing Module
-    0. Exit
-    HEREDOC
+    container = result[:container]
+    writer = result[:writer]
 
-    expected == writer.buffer[0]
-  }
+    container.get(:command_line).start
 
-  Assertions.check {
-    expected = <<~HEREDOC
-    Weighing Module:
+    expect(writer.buffer[0]).to eq(
+      <<~HEREDOC
+      Nutrition Tracker
 
-    1. List weighings
-    2. Add weighing
-    3. Delete weighing
-    0. Back
-    HEREDOC
+      1. Weighing Module
+      0. Exit
+      HEREDOC
+    )
 
-    expected == writer.buffer[1]
-  }
-}
+    expect(writer.buffer[1]).to eq(
+      <<~HEREDOC
+      Weighing Module:
+
+      1. List weighings
+      2. Add weighing
+      3. Delete weighing
+      0. Back
+      HEREDOC
+    )
+  end
+end

@@ -1,6 +1,5 @@
 RSpec.describe Domain::Food do
   context "When creating a food" do
-
   end
 
   context "#stats_for_weight" do
