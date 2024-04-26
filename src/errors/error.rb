@@ -10,7 +10,7 @@ class Errors::Error < StandardError
     @tags = tags
   end
 
-  def has_tag?(*tags)
+  def tag?(*tags)
     tags.any? { |tag| @tags.include?(tag) }
   end
 

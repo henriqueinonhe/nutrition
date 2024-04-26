@@ -8,41 +8,13 @@ RSpec.describe Infra::FsMealEntryPersistence do
       )
 
       foods_hash = {
-        '1' => Domain::Food.new(
-          id: '1',
-          name: 'Apple',
-          kcal_per_gram: 0.52,
-          carbohydrates_in_grams_per_gram: 0.14,
-          protein_in_grams_per_gram: 0.01,
-          total_fat_in_grams_per_gram: 0.01,
-          fibers_in_grams_per_gram: 0.02,
-          sodium_in_mg_per_gram: 0.01
-        ),
-        '2' => Domain::Food.new(
-          id: '2',
-          name: 'Banana',
-          kcal_per_gram: 0.89,
-          carbohydrates_in_grams_per_gram: 0.23,
-          protein_in_grams_per_gram: 0.01,
-          total_fat_in_grams_per_gram: 0.01,
-          fibers_in_grams_per_gram: 0.02,
-          sodium_in_mg_per_gram: 0.01
-        )
+        '1' => TestUtils::FoodFactory.call(id: '1'),
+        '2' => TestUtils::FoodFactory.call(id: '2')
       }
 
       meal_entries = [
-        Domain::MealEntry.new(
-          id: '1',
-          date: Time.new,
-          food: foods_hash['1'],
-          weight_in_grams: 100
-        ),
-        Domain::MealEntry.new(
-          id: '2',
-          date: Time.new,
-          food: foods_hash['2'],
-          weight_in_grams: 200
-        )
+        TestUtils::MealEntryFactory.call(food: foods_hash['1']),
+        TestUtils::MealEntryFactory.call(food: foods_hash['2'])
       ]
 
       meal_entry_persistence.store(meal_entries)

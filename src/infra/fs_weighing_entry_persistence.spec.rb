@@ -6,22 +6,10 @@ RSpec.describe Infra::FsWeighingEntryPersistence do
       persistence = Infra::FsWeighingEntryPersistence.new(weighings_file_path: './storage/weighings.test.json')
 
       weighing_entries = [
-        TestUtils::WeighingEntryFactory.call(
-          id: '1',
-          weight_in_kg: 57
-        ),
-        TestUtils::WeighingEntryFactory.call(
-          id: '2',
-          weight_in_kg: 69
-        ),
-        TestUtils::WeighingEntryFactory.call(
-          id: '3',
-          weight_in_kg: 12
-        ),
-        TestUtils::WeighingEntryFactory.call(
-          id: '4',
-          weight_in_kg: 34.5
-        )
+        TestUtils::WeighingEntryFactory.call,
+        TestUtils::WeighingEntryFactory.call,
+        TestUtils::WeighingEntryFactory.call,
+        TestUtils::WeighingEntryFactory.call
       ]
 
       persistence.store(weighing_entries)

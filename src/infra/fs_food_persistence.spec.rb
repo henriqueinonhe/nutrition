@@ -10,26 +10,9 @@ RSpec.describe Infra::FsFoodPersistence do
       )
 
       foods = [
-        Domain::Food.new(
-          id: '1',
-          name: 'Apple',
-          kcal_per_gram: 0.52,
-          carbohydrates_in_grams_per_gram: 0.14,
-          protein_in_grams_per_gram: 0.01,
-          total_fat_in_grams_per_gram: 0.01,
-          fibers_in_grams_per_gram: 0.02,
-          sodium_in_mg_per_gram: 0.01
-        ),
-        Domain::Food.new(
-          id: '2',
-          name: 'Banana',
-          kcal_per_gram: 0.89,
-          carbohydrates_in_grams_per_gram: 0.23,
-          protein_in_grams_per_gram: 0.01,
-          total_fat_in_grams_per_gram: 0.01,
-          fibers_in_grams_per_gram: 0.02,
-          sodium_in_mg_per_gram: 0.01
-        )
+        TestUtils::FoodFactory.call,
+        TestUtils::FoodFactory.call,
+        TestUtils::FoodFactory.call
       ]
 
       food_persistence.store(foods)

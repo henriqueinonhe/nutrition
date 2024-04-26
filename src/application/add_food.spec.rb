@@ -4,25 +4,13 @@ RSpec.describe Application::AddFood do
   context 'When food name is duplicated' do
     def setup
       foods_hash = {
-        '1': Domain::Food.new(
+        '1' => TestUtils::FoodFactory.call(
           id: '1',
-          name: 'Apple',
-          kcal_per_gram: 0.52,
-          carbohydrates_in_grams_per_gram: 0.14,
-          protein_in_grams_per_gram: 0.01,
-          total_fat_in_grams_per_gram: 0.01,
-          fibers_in_grams_per_gram: 0.02,
-          sodium_in_mg_per_gram: 0.01
+          name: 'Apple'
         ),
-        '2': Domain::Food.new(
+        '2' => TestUtils::FoodFactory.call(
           id: '2',
-          name: 'Banana',
-          kcal_per_gram: 0.89,
-          carbohydrates_in_grams_per_gram: 0.23,
-          protein_in_grams_per_gram: 0.01,
-          total_fat_in_grams_per_gram: 0.01,
-          fibers_in_grams_per_gram: 0.02,
-          sodium_in_mg_per_gram: 0.01
+          name: 'Banana'
         )
       }
 
@@ -65,25 +53,13 @@ RSpec.describe Application::AddFood do
   context 'When adding a new food' do
     def setup
       foods_hash = {
-        '1' => Domain::Food.new(
+        '1' => TestUtils::FoodFactory.call(
           id: '1',
-          name: 'Apple',
-          kcal_per_gram: 0.52,
-          carbohydrates_in_grams_per_gram: 0.14,
-          protein_in_grams_per_gram: 0.01,
-          total_fat_in_grams_per_gram: 0.01,
-          fibers_in_grams_per_gram: 0.02,
-          sodium_in_mg_per_gram: 0.01
+          name: 'Apple'
         ),
-        '2' => Domain::Food.new(
+        '2' => TestUtils::FoodFactory.call(
           id: '2',
-          name: 'Banana',
-          kcal_per_gram: 0.89,
-          carbohydrates_in_grams_per_gram: 0.23,
-          protein_in_grams_per_gram: 0.01,
-          total_fat_in_grams_per_gram: 0.01,
-          fibers_in_grams_per_gram: 0.02,
-          sodium_in_mg_per_gram: 0.01
+          name: 'Banana'
         )
       }
 

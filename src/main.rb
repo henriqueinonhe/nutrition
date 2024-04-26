@@ -11,5 +11,4 @@ loader.setup
 
 container = RootContainer
 
-container.get(:retrieve_weighing_entries).call
 container.get(:command_line).start

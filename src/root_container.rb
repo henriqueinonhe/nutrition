@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
 RootContainer = Di::Container.new(
-  weighings: Di::Container.value_resolver([]),
   weighings_file_path: Di::Container.value_resolver('./storage/weighings.json'),
   weighing_entry_persistence: Di::Container.class_resolver(Infra::FsWeighingEntryPersistence),
-  retrieve_weighing_entries: Di::Container.class_resolver(Application::RetrieveWeighingEntries),
   app_add_weighing: Di::Container.class_resolver(Application::AddWeighing),
   reader: Di::Container.value_resolver(Interface::StdinReader),
   writer: Di::Container.value_resolver(Interface::StdoutWriter),
