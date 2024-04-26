@@ -38,8 +38,8 @@ RSpec.describe Interface::CommandLine do
       end
     end
 
-    reader = writer_mock_class.new
-    writer = reader_mock_class.new
+    reader = reader_mock_class.new
+    writer = writer_mock_class.new
     weighing_entry_persistence = Infra::FsWeighingEntryPersistence.new(
       weighings_file_path: './storage/weighings.test.json'
     )

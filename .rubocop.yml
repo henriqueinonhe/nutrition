@@ -3,6 +3,8 @@ require:
 
 AllCops:
   NewCops: enable
+  Exclude:
+    - "./src/sandbox.rb"
 
 Style/Documentation:
   Enabled: false

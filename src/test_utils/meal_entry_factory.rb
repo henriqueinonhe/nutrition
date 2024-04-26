@@ -6,7 +6,7 @@ module TestUtils::MealEntryFactory
       id: Random.uuid,
       date: Time.new,
       food: TestUtils::FoodFactory.call,
-      weight_in_grams: 100
+      weight_in_grams: Random.rand(1...500)
     }
 
     result = default_values.merge(overrides)

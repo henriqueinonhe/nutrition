@@ -6,7 +6,7 @@ class Domain::WeighingEntry
   attr_reader :id, :date, :weight_in_kg
 
   def self.validate_id(id)
-    return if id.is_a?(String) || id.empty?
+    return unless !id.is_a?(String) || id.empty?
 
     raise Errors::Error.new(
       msg: "ID (#{id}) is not a valid ID!",
